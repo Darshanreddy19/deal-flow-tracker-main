@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   PieChart,
@@ -15,72 +15,164 @@ import {
 } from "recharts";
 import { Deal } from "@/data/types";
 import { MOCK_DEALS } from "@/data/mockData";
-import { TrendingUp, AlertCircle, CheckCircle, Clock } from "lucide-react";
+import { TrendingUp, AlertCircle, CheckCircle, Clock, Loader2 } from "lucide-react";
+import { useQdrantDeals, type QdrantDeal } from "@/hooks/useQdrantDeals";
 
 interface DashboardInfographicsProps {
   onViewDeal?: (deal: Deal) => void;
 }
 
 const DashboardInfographics = ({ onViewDeal }: DashboardInfographicsProps) => {
-  const stats = useMemo(() => {
-    const deals = MOCK_DEALS;
+  const { fetchAllDeals, loading: qdrantLoading } = useQdrantDeals();
+  const [qdrantDeals, setQdrantDeals] = useState<QdrantDeal[]>([]);
+  const [useQdrant, setUseQdrant] = useState(true);
 
-    // Calculate metrics
-    const closedDeals = deals.filter(d => d.status === "on_track").length;
-    const totalDeals = deals.length;
-    const blockedDeals = deals.filter(d => d.status === "blocked").length;
-    const actionNeeded = deals.filter(d => d.status === "action_needed").length;
-
-    const totalValue = deals.reduce((sum, d) => sum + parseFloat(d.value.replace(/[$M]/g, "")), 0);
-    const successRate = (closedDeals / totalDeals) * 100;
-    const avgConfidence = deals.reduce((sum, d) => sum + d.confidenceScore, 0) / totalDeals;
-    const avgProgress = deals.reduce((sum, d) => sum + d.progress, 0) / totalDeals;
-
-    // Portfolio by sector
-    const sectorMap = new Map<string, number>();
-    deals.forEach(deal => {
-      const current = sectorMap.get(deal.sector) || 0;
-      sectorMap.set(deal.sector, current + parseFloat(deal.value.replace(/[$M]/g, "")));
-    });
-
-    const portfolioBySector = Array.from(sectorMap.entries()).map(([sector, value]) => ({
-      name: sector,
-      value: parseFloat(value.toFixed(1)),
-    }));
-
-    // Deal status distribution
-    const statusDistribution = [
-      { name: "On Track", value: closedDeals, fill: "#10b981" },
-      { name: "Action Needed", value: actionNeeded, fill: "#f59e0b" },
-      { name: "Blocked", value: blockedDeals, fill: "#ef4444" },
-    ];
-
-    // Risk distribution
-    const riskMap = new Map<string, number>();
-    deals.forEach(deal => {
-      const current = riskMap.get(deal.riskLevel) || 0;
-      riskMap.set(deal.riskLevel, current + 1);
-    });
-
-    const riskDistribution = Array.from(riskMap.entries()).map(([risk, count]) => ({
-      name: risk,
-      count,
-    }));
-
-    return {
-      closedDeals,
-      totalDeals,
-      blockedDeals,
-      actionNeeded,
-      totalValue: totalValue.toFixed(1),
-      successRate: successRate.toFixed(0),
-      avgConfidence: (avgConfidence * 100).toFixed(0),
-      avgProgress: avgProgress.toFixed(0),
-      portfolioBySector,
-      statusDistribution,
-      riskDistribution,
+  // Fetch Qdrant deals on component mount
+  useEffect(() => {
+    const loadDeals = async () => {
+      if (useQdrant) {
+        const deals = await fetchAllDeals(10);
+        if (deals.length > 0) {
+          setQdrantDeals(deals);
+        } else {
+          // Fallback to mock data if Qdrant is empty
+          setUseQdrant(false);
+        }
+      }
     };
-  }, []);
+    loadDeals();
+  }, [fetchAllDeals, useQdrant]);
+
+  const stats = useMemo(() => {
+    // Use Qdrant data if available, otherwise use mock data
+    const deals = useQdrant && qdrantDeals.length > 0 ? qdrantDeals : MOCK_DEALS;
+
+    if (useQdrant && qdrantDeals.length > 0) {
+      // Process Qdrant deals
+      const statusCounts = {
+        "Processing / Documentary Verification": 0,
+        "Blocked": 0,
+        "Settling / FX Conversion": 0,
+        "In-Transit / Logistics Coordination": 0,
+        "Expansion / Investment Phase": 0,
+        "Localization / Regulatory Approval": 0,
+        "Negotiation / Ruble Settlement Pilot": 0,
+        "In-Transit / Retail Distribution": 0,
+        "Contracting / Customs": 0,
+        "Fulfillment / Payments": 0,
+      };
+
+      qdrantDeals.forEach(deal => {
+        const status = deal.status as keyof typeof statusCounts;
+        if (status in statusCounts) {
+          statusCounts[status]++;
+        }
+      });
+
+      const closedDeals = statusCounts["Processing / Documentary Verification"] || 0;
+      const blockedDeals = statusCounts["Blocked"] || 0;
+      const actionNeeded = qdrantDeals.length - closedDeals - blockedDeals;
+      const totalDeals = qdrantDeals.length;
+      const avgConfidence = qdrantDeals.reduce((sum, d) => sum + (d.confidence_score || 0), 0) / totalDeals;
+      const successRate = (closedDeals / totalDeals) * 100;
+
+      // Portfolio by sector
+      const sectorMap = new Map<string, number>();
+      qdrantDeals.forEach(deal => {
+        const current = sectorMap.get(deal.sector) || 0;
+        sectorMap.set(deal.sector, current + 1);
+      });
+
+      const portfolioBySector = Array.from(sectorMap.entries()).map(([sector, count]) => ({
+        name: sector,
+        value: count,
+      }));
+
+      // Risk distribution
+      const riskMap = new Map<string, number>();
+      qdrantDeals.forEach(deal => {
+        const riskLevel = deal.status.includes("Blocked") ? "High" : deal.status.includes("In-Transit") ? "Medium" : "Low";
+        const current = riskMap.get(riskLevel) || 0;
+        riskMap.set(riskLevel, current + 1);
+      });
+
+      const riskDistribution = Array.from(riskMap.entries()).map(([risk, count]) => ({
+        name: risk,
+        count,
+      }));
+
+      return {
+        closedDeals,
+        totalDeals,
+        blockedDeals,
+        actionNeeded,
+        totalValue: (closedDeals * 2.5).toFixed(1),
+        successRate: successRate.toFixed(0),
+        avgConfidence: (avgConfidence * 100).toFixed(0),
+        avgProgress: ((closedDeals / totalDeals) * 100).toFixed(0),
+        portfolioBySector,
+        statusDistribution: [
+          { name: "Processing", value: closedDeals, fill: "#10b981" },
+          { name: "In Progress", value: actionNeeded, fill: "#f59e0b" },
+          { name: "Blocked", value: blockedDeals, fill: "#ef4444" },
+        ],
+        riskDistribution,
+      };
+    } else {
+      // Original mock data processing
+      const closedDeals = MOCK_DEALS.filter(d => d.status === "on_track").length;
+      const totalDeals = MOCK_DEALS.length;
+      const blockedDeals = MOCK_DEALS.filter(d => d.status === "blocked").length;
+      const actionNeeded = MOCK_DEALS.filter(d => d.status === "action_needed").length;
+
+      const totalValue = MOCK_DEALS.reduce((sum, d) => sum + parseFloat(d.value.replace(/[$M]/g, "")), 0);
+      const successRate = (closedDeals / totalDeals) * 100;
+      const avgConfidence = MOCK_DEALS.reduce((sum, d) => sum + d.confidenceScore, 0) / totalDeals;
+      const avgProgress = MOCK_DEALS.reduce((sum, d) => sum + d.progress, 0) / totalDeals;
+
+      const sectorMap = new Map<string, number>();
+      MOCK_DEALS.forEach(deal => {
+        const current = sectorMap.get(deal.sector) || 0;
+        sectorMap.set(deal.sector, current + parseFloat(deal.value.replace(/[$M]/g, "")));
+      });
+
+      const portfolioBySector = Array.from(sectorMap.entries()).map(([sector, value]) => ({
+        name: sector,
+        value: parseFloat(value.toFixed(1)),
+      }));
+
+      const statusDistribution = [
+        { name: "On Track", value: closedDeals, fill: "#10b981" },
+        { name: "Action Needed", value: actionNeeded, fill: "#f59e0b" },
+        { name: "Blocked", value: blockedDeals, fill: "#ef4444" },
+      ];
+
+      const riskMap = new Map<string, number>();
+      MOCK_DEALS.forEach(deal => {
+        const current = riskMap.get(deal.riskLevel) || 0;
+        riskMap.set(deal.riskLevel, current + 1);
+      });
+
+      const riskDistribution = Array.from(riskMap.entries()).map(([risk, count]) => ({
+        name: risk,
+        count,
+      }));
+
+      return {
+        closedDeals,
+        totalDeals,
+        blockedDeals,
+        actionNeeded,
+        totalValue: totalValue.toFixed(1),
+        successRate: successRate.toFixed(0),
+        avgConfidence: (avgConfidence * 100).toFixed(0),
+        avgProgress: avgProgress.toFixed(0),
+        portfolioBySector,
+        statusDistribution,
+        riskDistribution,
+      };
+    }
+  }, [useQdrant, qdrantDeals]);
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -97,7 +189,17 @@ const DashboardInfographics = ({ onViewDeal }: DashboardInfographicsProps) => {
 
   return (
     <div className="h-full overflow-y-auto bg-background p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
+      {qdrantLoading && (
+        <div className="flex items-center justify-center h-full">
+          <div className="text-center">
+            <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
+            <p className="text-muted-foreground">Loading portfolio data from Qdrant...</p>
+          </div>
+        </div>
+      )}
+
+      {!qdrantLoading && (
+        <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -362,7 +464,8 @@ const DashboardInfographics = ({ onViewDeal }: DashboardInfographicsProps) => {
             Deal Pipeline view to dive deeper into specific transactions and communication threads.
           </p>
         </motion.div>
-      </div>
+        </div>
+      )}
     </div>
   );
 };

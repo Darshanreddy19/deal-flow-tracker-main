@@ -14,6 +14,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import uvicorn
 
+# Import Qdrant service
+try:
+    from qdrant_service import search_similar, ensure_collection
+    QDRANT_AVAILABLE = True
+except ImportError:
+    QDRANT_AVAILABLE = False
+
 # Create FastAPI app for backend APIs (on port 8080)
 app = FastAPI(
     title="DealFlow Backend API",
@@ -412,15 +419,15 @@ async def analyze_deal(deal_id: int):
     Simulates AI analysis instantly without delays
     """
     global ACTION_COUNTER
-    
+
     # O(1) lookup
     deal = DEALS_BY_ID.get(deal_id)
     if not deal:
         raise HTTPException(status_code=404, detail="Deal not found")
-    
+
     # Get messages for context (O(1) lookup)
     deal_messages = MESSAGES_BY_DEAL_ID.get(deal_id, [])
-    
+
     # INSTANT AI ANALYSIS - No delays or timeouts
     if deal['risk'] == "HIGH":
         suggestion = f"URGENT: Complete KYC verification for {deal['client']['name']} before proceeding"
@@ -434,7 +441,7 @@ async def analyze_deal(deal_id: int):
         suggestion = f"Proceed with contract finalization. Request final approval from {deal['client']['name']}"
         priority = "MEDIUM"
         confidence = 0.85
-    
+
     # Create AI action instantly
     ai_action = {
         "id": ACTION_COUNTER,
@@ -447,7 +454,7 @@ async def analyze_deal(deal_id: int):
     }
     ACTION_COUNTER += 1
     AI_ACTIONS.append(ai_action)
-    
+
     # Return instantly - NO setTimeout, NO delays
     return JSONResponse(
         status_code=200,
@@ -462,6 +469,137 @@ async def analyze_deal(deal_id: int):
                 "confidence_score": confidence,
                 "ai_action_id": ai_action['id']
             }
+        }
+    )
+
+# ════════════════════════════════════════════════════════════════════════════
+# QDRANT ENDPOINTS - Fetch synthetic deals from Qdrant
+# ════════════════════════════════════════════════════════════════════════════
+
+@app.get("/api/qdrant/deals")
+async def get_qdrant_deals(limit: int = 10):
+    """Get all deals from Qdrant (synthetically generated)"""
+    if not QDRANT_AVAILABLE:
+        raise HTTPException(status_code=503, detail="Qdrant service not available")
+
+    # Search for all deals (query with empty string to get top matches)
+    results = search_similar(query="deal", k=limit)
+
+    deals = []
+    for result in results:
+        payload = result['payload']
+        try:
+            deal = {
+                "deal_id": payload.get("deal_id"),
+                "sector": payload.get("sector"),
+                "parties": {
+                    "client": payload.get("client"),
+                    "supplier": payload.get("supplier"),
+                    "specialist": payload.get("specialist"),
+                },
+                "status": payload.get("status"),
+                "bottleneck": payload.get("bottleneck"),
+                "action_items": json.loads(payload.get("action_items", "[]")),
+                "communication_history": json.loads(payload.get("communication_history", "[]")),
+                "confidence_score": result['score'],
+            }
+            deals.append(deal)
+        except Exception as e:
+            print(f"Error parsing deal: {e}")
+            continue
+
+    return JSONResponse(
+        status_code=200,
+        content={
+            "success": True,
+            "source": "qdrant",
+            "count": len(deals),
+            "data": deals
+        }
+    )
+
+@app.get("/api/qdrant/deals/{deal_id}")
+async def search_qdrant_deal(deal_id: str):
+    """Search for a specific deal in Qdrant"""
+    if not QDRANT_AVAILABLE:
+        raise HTTPException(status_code=503, detail="Qdrant service not available")
+
+    # Search for this specific deal
+    results = search_similar(
+        query=deal_id,
+        k=1,
+        filter_conditions={"deal_id": deal_id}
+    )
+
+    if not results:
+        raise HTTPException(status_code=404, detail=f"Deal {deal_id} not found in Qdrant")
+
+    result = results[0]
+    payload = result['payload']
+
+    deal = {
+        "deal_id": payload.get("deal_id"),
+        "sector": payload.get("sector"),
+        "parties": {
+            "client": payload.get("client"),
+            "supplier": payload.get("supplier"),
+            "specialist": payload.get("specialist"),
+        },
+        "status": payload.get("status"),
+        "bottleneck": payload.get("bottleneck"),
+        "action_items": json.loads(payload.get("action_items", "[]")),
+        "communication_history": json.loads(payload.get("communication_history", "[]")),
+        "confidence_score": result['score'],
+    }
+
+    return JSONResponse(
+        status_code=200,
+        content={
+            "success": True,
+            "source": "qdrant",
+            "data": deal
+        }
+    )
+
+@app.get("/api/qdrant/deals/search/{query}")
+async def search_qdrant_deals(query: str, limit: int = 5):
+    """Search deals in Qdrant by sector, status, or keywords"""
+    if not QDRANT_AVAILABLE:
+        raise HTTPException(status_code=503, detail="Qdrant service not available")
+
+    results = search_similar(query=query, k=limit)
+
+    deals = []
+    for result in results:
+        payload = result['payload']
+        try:
+            deal = {
+                "deal_id": payload.get("deal_id"),
+                "sector": payload.get("sector"),
+                "parties": {
+                    "client": payload.get("client"),
+                    "supplier": payload.get("supplier"),
+                    "specialist": payload.get("specialist"),
+                },
+                "status": payload.get("status"),
+                "bottleneck": payload.get("bottleneck"),
+                "action_items": json.loads(payload.get("action_items", "[]")),
+                "communication_history": json.loads(payload.get("communication_history", "[]")),
+                "confidence_score": result['score'],
+            }
+            deals.append(deal)
+        except Exception as e:
+            print(f"Error parsing deal: {e}")
+            continue
+
+    return JSONResponse(
+        status_code=200,
+        content={
+            "success": True,
+            "source": "qdrant",
+            "query": query,
+            "count": len(deals),
+            "data": deals
         }
     )
 
@@ -489,12 +627,21 @@ if __name__ == "__main__":
     print("   • Response caching headers")
     print("   • Minimal logging overhead")
     print("   • Instant AI analysis (< 10ms)")
+    if QDRANT_AVAILABLE:
+        print("   • Qdrant integration enabled")
+        try:
+            ensure_collection()
+            print("   ✅ Qdrant collection ready")
+        except Exception as e:
+            print(f"   ⚠️  Qdrant warning: {e}")
+    else:
+        print("   ⚠️  Qdrant not available (optional)")
     print(f"\n[GLOBE] http://localhost:8080/health\n")
-    
+
     # Start server on port 8080 with minimal logging
     uvicorn.run(
-        app, 
-        host="127.0.0.1", 
+        app,
+        host="127.0.0.1",
         port=8080,
         log_level="error"  # Only show errors, no debug logs
     )
