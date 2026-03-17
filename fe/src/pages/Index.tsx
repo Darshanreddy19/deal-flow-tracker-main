@@ -160,7 +160,7 @@ const Index = () => {
         <header className="h-14 border-b border-border bg-card flex items-center justify-between px-6">
           <div className="flex items-center gap-4">
             <h1 className="text-sm font-bold text-foreground">
-              {activeView === "dashboard" ? "Portfolio Overview" : activeView === "deals" ? "Deal Pipeline" : activeView === "chat" ? "Communications Hub" : "Settings"}
+              {activeView === "dashboard" ? "Overview" : activeView === "deals" ? "Deal Pipeline" : activeView === "chat" ? "Communications Hub" : "Settings"}
             </h1>
             <span className="text-xs font-mono text-muted-foreground">
               {new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}

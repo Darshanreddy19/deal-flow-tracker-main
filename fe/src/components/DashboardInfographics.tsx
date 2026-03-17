@@ -104,7 +104,7 @@ const DashboardInfographics = ({ onViewDeal }: DashboardInfographicsProps) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1 className="text-3xl font-bold text-foreground mb-2">Portfolio Overview</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">Overview</h1>
           <p className="text-muted-foreground">
             Real-time insights into your deal pipeline and relationship portfolio
           </p>
