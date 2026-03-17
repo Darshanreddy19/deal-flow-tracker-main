@@ -7,6 +7,7 @@ import DealCard from "@/components/DealCard";
 import DealDetailPanel from "@/components/DealDetailPanel";
 import ChatMessage from "@/components/ChatMessage";
 import ChatInput from "@/components/ChatInput";
+import DashboardInfographics from "@/components/DashboardInfographics";
 import { MOCK_DEALS, MOCK_MESSAGES } from "@/data/mockData";
 import StatusBadge from "@/components/StatusBadge";
 import { Deal, Message, AnalysisResult } from "@/data/types";
@@ -159,7 +160,7 @@ const Index = () => {
         <header className="h-14 border-b border-border bg-card flex items-center justify-between px-6">
           <div className="flex items-center gap-4">
             <h1 className="text-sm font-bold text-foreground">
-              {activeView === "dashboard" ? "Mission Control" : activeView === "chat" ? "Communications Hub" : "Deal Pipeline"}
+              {activeView === "dashboard" ? "Portfolio Overview" : activeView === "deals" ? "Deal Pipeline" : activeView === "chat" ? "Communications Hub" : "Settings"}
             </h1>
             <span className="text-xs font-mono text-muted-foreground">
               {new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
@@ -187,7 +188,9 @@ const Index = () => {
 
         {/* Main content */}
         <div className="flex-1 overflow-hidden">
-          {(activeView === "dashboard" || activeView === "deals") && (
+          {activeView === "dashboard" && <DashboardInfographics />}
+
+          {activeView === "deals" && (
             <div className="h-full flex flex-col">
               {/* Metrics row */}
               <div className="grid grid-cols-4 gap-4 p-6 pb-3">
@@ -197,10 +200,10 @@ const Index = () => {
                 <MetricCard label="Avg Confidence" value={metrics.avgConfidence} change="-2% vs last week" trend="down" icon="activity" delay={0.3} />
               </div>
 
-              {/* Deal list + detail + chat */}
+              {/* Deal list + detail */}
               <div className="flex-1 flex overflow-hidden px-6 pb-6 gap-4">
                 {/* Deal list */}
-                <div className="w-80 flex-shrink-0 flex flex-col overflow-hidden rounded-lg border border-border bg-card">
+                <div className="flex-1 flex flex-col overflow-hidden rounded-lg border border-border bg-card">
                   <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                     <h2 className="text-xs font-mono text-muted-foreground uppercase tracking-wider">Active Deals</h2>
                     <button className="text-muted-foreground hover:text-foreground transition-colors">
@@ -221,42 +224,11 @@ const Index = () => {
                 </div>
 
                 {/* Deal detail */}
-                <div className="w-72 flex-shrink-0 rounded-lg border border-border bg-card overflow-hidden">
+                <div className="flex-1 rounded-lg border border-border bg-card overflow-hidden">
                   <div className="px-4 py-3 border-b border-border">
                     <h2 className="text-xs font-mono text-muted-foreground uppercase tracking-wider">Deal Intelligence</h2>
                   </div>
                   <DealDetailPanel deal={selectedDeal} />
-                </div>
-
-                {/* Chat panel */}
-                <div className="flex-1 flex flex-col rounded-lg border border-border bg-card overflow-hidden">
-                  <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                    <h2 className="text-xs font-mono text-muted-foreground uppercase tracking-wider">
-                      Communication Thread — {selectedDeal.id}
-                    </h2>
-                    <span className="text-xs font-mono text-primary">{filteredMessages.length} messages</span>
-                  </div>
-                  {error && (
-                    <div className="px-4 py-2 bg-destructive/10 border-b border-destructive/20 text-xs text-destructive">
-                      {error}
-                    </div>
-                  )}
-                  <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                    {filteredMessages.length > 0 ? (
-                      filteredMessages.map((msg, i) => (
-                        <ChatMessage key={msg.id} message={msg} index={i} />
-                      ))
-                    ) : (
-                      <div className="flex items-center justify-center h-full text-muted-foreground text-sm font-mono">
-                        No communications for this deal yet
-                      </div>
-                    )}
-                  </div>
-                  <ChatInput 
-                    onSend={handleSendMessage} 
-                    onAnalyze={handleAnalyze}
-                    isAnalyzing={isAnalyzing}
-                  />
                 </div>
               </div>
             </div>

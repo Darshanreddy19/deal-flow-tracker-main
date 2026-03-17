@@ -6,35 +6,35 @@
 
 @layer base {
   :root {
-    --background: 222 47% 6%;
-    --foreground: 210 40% 92%;
+    --background: 210 40% 96%;
+    --foreground: 222 47% 10%;
 
-    --card: 222 40% 9%;
-    --card-foreground: 210 40% 92%;
+    --card: 210 40% 98%;
+    --card-foreground: 222 47% 10%;
 
-    --popover: 222 40% 9%;
-    --popover-foreground: 210 40% 92%;
+    --popover: 210 40% 98%;
+    --popover-foreground: 222 47% 10%;
 
     --primary: 172 66% 50%;
-    --primary-foreground: 222 47% 6%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 222 30% 14%;
-    --secondary-foreground: 210 40% 85%;
+    --secondary: 222 30% 85%;
+    --secondary-foreground: 222 47% 15%;
 
-    --muted: 222 25% 12%;
-    --muted-foreground: 215 20% 55%;
+    --muted: 222 25% 88%;
+    --muted-foreground: 215 20% 45%;
 
     --accent: 142 60% 50%;
-    --accent-foreground: 222 47% 6%;
+    --accent-foreground: 210 40% 98%;
 
     --destructive: 0 72% 55%;
     --destructive-foreground: 210 40% 98%;
 
     --warning: 38 92% 55%;
-    --warning-foreground: 222 47% 6%;
+    --warning-foreground: 222 47% 10%;
 
-    --border: 222 25% 16%;
-    --input: 222 25% 16%;
+    --border: 222 25% 84%;
+    --input: 222 25% 90%;
     --ring: 172 66% 50%;
 
     --radius: 0.5rem;
@@ -47,13 +47,13 @@
     --glow-warning: 0 0 20px hsl(38 92% 55% / 0.15);
     --glow-destructive: 0 0 20px hsl(0 72% 55% / 0.15);
 
-    --sidebar-background: 222 40% 7%;
-    --sidebar-foreground: 210 40% 85%;
+    --sidebar-background: 210 40% 93%;
+    --sidebar-foreground: 222 47% 15%;
     --sidebar-primary: 172 66% 50%;
-    --sidebar-primary-foreground: 222 47% 6%;
-    --sidebar-accent: 222 25% 12%;
-    --sidebar-accent-foreground: 210 40% 85%;
-    --sidebar-border: 222 25% 14%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 222 25% 88%;
+    --sidebar-accent-foreground: 222 47% 15%;
+    --sidebar-border: 222 25% 86%;
     --sidebar-ring: 172 66% 50%;
   }
 }
@@ -95,8 +95,8 @@
   }
   .bg-grid {
     background-image:
-      linear-gradient(hsl(222 25% 16% / 0.5) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(222 25% 16% / 0.5) 1px, transparent 1px);
+      linear-gradient(hsl(222 25% 84% / 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(222 25% 84% / 0.5) 1px, transparent 1px);
     background-size: 40px 40px;
   }
 }
@@ -107,14 +107,14 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: hsl(222 47% 6%);
+  background: hsl(210 40% 96%);
 }
 ::-webkit-scrollbar-thumb {
-  background: hsl(222 25% 20%);
+  background: hsl(222 25% 80%);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(222 25% 28%);
+  background: hsl(222 25% 72%);
 }
 
 /* Pulse animation for status indicators */
