@@ -432,4 +432,157 @@ export const MOCK_MESSAGES: Message[] = [
     dealId: "SBER-IND-RU-2026-010",
     sentiment: "positive",
   },
+  {
+    "id": "25",
+    "sender": "Anil Deshmukh (L&T)",
+    "content": "Dear Mikhail, Please find attached the revised commercial proposal for the Heavy Duty Heat Exchangers and Distillation Columns as discussed. The total contract value stands at $22.5M. We have incorporated the technical modifications requested by Elena. To ensure absolute clarity before we proceed to the formal contracting phase, I am outlining the comprehensive technical and commercial scope below for your immediate reference. \n\n1.0 EQUIPMENT OVERVIEW AND SCOPE OF SUPPLY: The scope of supply encompasses the complete design, engineering, procurement of raw materials, manufacturing, fabrication, assembly, inspection, testing, painting, packaging, and delivery (on CIF Novorossiysk terms) of three (3) Heavy Duty Shell and Tube Heat Exchangers (Item Tags: HX-201A/B/C) and two (2) Main Atmospheric Distillation Columns (Item Tags: DC-101, DC-102) intended for the Saratov refinery modernization project. The equipment is specifically engineered to handle high-sulfur Ural crude derivatives under extreme pressure and temperature variations. \n\n2.0 DETAILED TECHNICAL SPECIFICATIONS - HEAT EXCHANGERS (HX-201A/B/C): Each unit is designed in strict accordance with TEMA R (Tubular Exchanger Manufacturers Association, Class R for severe requirements of petroleum and related processing applications) and ASME Boiler and Pressure Vessel Code, Section VIII, Division 1. The shell side is rated for a design pressure of 45.0 kg/cm2(g) and a design temperature of 350°C. The tube side is rated for a design pressure of 60.0 kg/cm2(g) and a design temperature of 400°C. Metallurgy: Shell material shall be SA-516 Gr. 70 with a 3mm Hydrogen Induced Cracking (HIC) resistant cladding of SA-240 Type 316L. The tubes shall be seamlessly drawn, manufactured from Titanium Grade 2 (SB-338 Gr. 2) to ensure maximum resistance against naphthenic acid corrosion and sulfidation at elevated temperatures. Tube sheet material is SA-765 Gr. II with explosive bonded Titanium cladding. Baffle plates will be SA-516 Gr. 70. Each unit will feature a customized impingement baffle design to mitigate flow-induced vibration, which was a critical concern raised during the preliminary HAZOP review. The total heat transfer area per unit is exactly 1,450 square meters. \n\n3.0 DETAILED TECHNICAL SPECIFICATIONS - DISTILLATION COLUMNS (DC-101, DC-102): The main atmospheric columns have an overall tangent-to-tangent length of 48.5 meters and an internal diameter of 4.2 meters. Design pressure is 5.5 kg/cm2(g) / Full Vacuum, and design temperature is 380°C. The base material of construction is SA-516 Gr. 70 NACE (normalized) to meet NACE MR0103 standards for sulfide stress cracking resistance in corrosive petroleum refining environments. The internal cladding from the bottom tangent line up to the heavy gas oil draw-off tray (Tray #15) shall be 3mm thick Monel 400 (SB-127) to combat high-temperature hydrochloric acid and naphthenic acid corrosion. Above Tray #15 to the top tangent line, the cladding shall be 3mm thick SA-240 Type 410S stainless steel. The columns will be supplied fully dressed with internal tray support rings, downcomer bolting bars, and all necessary external platforms, ladders, and pipe supports. The scope excludes the actual fractionating trays, which we understand will be sourced separately by Rosneft from Koch-Glitsch. \n\n4.0 INSPECTION AND TESTING PROTOCOLS (ITP): The manufacturing process will be subject to a rigorous Inspection and Test Plan (ITP), requiring stage-wise approval from both L&T's internal QA/QC department and Rosneft's designated third-party inspection agency (TPIA). Required non-destructive testing (NDT) includes 100% Radiographic Testing (RT) of all long and girth seams on the shell and columns, 100% Ultrasonic Testing (UT) of all plate materials thicker than 25mm, Magnetic Particle Inspection (MPI) or Liquid Penetrant Inspection (LPI) of all fillet welds and attachment welds, and Positive Material Identification (PMI) on 100% of all alloy components, including tubes, cladding, and welding consumables. Furthermore, hydrostatic testing will be performed at 1.3 times the maximum allowable working pressure (MAWP) corrected for temperature, utilizing demineralized water with a chloride content not exceeding 25 ppm. A stringent helium leak test will also be conducted on the tube-to-tubesheet joints of the heat exchangers. \n\n5.0 COMMERCIAL TERMS AND DELIVERY SCHEDULE: As previously agreed, the total firm and fixed price is $22,500,000 USD. Payment terms are strictly via an irrevocable, unconfirmed, non-transferable Letter of Credit (LC) payable at sight, covering 100% of the contract value. The LC must be issued by a mutually acceptable international bank and advised through Axis Bank, India. The delivery timeline is set at 45 weeks from the date of receipt of the operative LC and approval of all major fabrication drawings. Delivery terms are CIF (Cost, Insurance, and Freight) to the Port of Novorossiysk, Russia, as per Incoterms 2020. \n\n6.0 DOCUMENTATION AND CERTIFICATION: L&T will provide a comprehensive Manufacturing Data Record (MDR) comprising, but not limited to: Approved as-built drawings, design calculations (including wind and seismic analysis for the columns), material test certificates (MTCs) as per EN 10204 Type 3.1 or 3.2 where applicable, welding procedure specifications (WPS), procedure qualification records (PQR), welder performance qualifications (WPQ), NDT reports, heat treatment charts, dimensional inspection reports, and the final release note from the TPIA. We also require a formalized End-User Certificate (EUC) from Rosneft explicitly stating the civilian application of these goods, which is a mandatory prerequisite for our internal compliance and export control procedures. \n\n7.0 WARRANTY AND LIABILITY: L&T warrants that the equipment shall be free from defects in material and workmanship for a period of 18 months from the date of shipment or 12 months from the date of commissioning, whichever occurs first. Our maximum aggregate liability under this contract, whether in contract, tort, or otherwise, shall be strictly limited to 100% of the contract value. Consequential, indirect, or punitive damages are explicitly excluded. \n\nPlease review this exhaustive summary. If everything is in order, we can proceed to finalize the overarching commercial contract and simultaneously begin the LC drafting process. We are eager to commence engineering works and secure the raw material supply chain, which is currently experiencing significant lead-time volatility in the global market. Looking forward to your prompt confirmation.",
+    "timestamp": "2024-02-10 09:00",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "positive"
+  },
+  {
+    "id": "26",
+    "sender": "Mikhail Volkov (Rosneft)",
+    "content": "Anil, received. The pricing aligns with our expectations. Elena's team is giving it a final review. In the meantime, please initiate the process with your banking partners for the Letter of Credit. We want to move fast on this.",
+    "timestamp": "2024-02-11 14:30",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "positive"
+  },
+  {
+    "id": "27",
+    "sender": "Elena Smirnova (Rosneft)",
+    "content": "Confirming technical approval from our side. The metallurgy specifications for the high-sulfur environment have been correctly updated. Proceeding to next steps.",
+    "timestamp": "2024-02-12 11:15",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "positive"
+  },
+  {
+    "id": "28",
+    "sender": "Anil Deshmukh (L&T)",
+    "content": "Adding Rohan Mehta from Axis Bank to this thread. Rohan, please see the attached proforma invoice for $22.5M. We need to initiate the LC issuance process. Rosneft will be the applicant. Let us know the required documentation.",
+    "timestamp": "2024-02-12 16:45",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "neutral"
+  },
+  {
+    "id": "29",
+    "sender": "Rohan Mehta (Axis Bank)",
+    "content": "Thanks Anil. Congratulations on the mandate. I've forwarded the PI to our trade finance desk. However, given the destination and current geopolitical climate, I also have to loop in our Global Compliance Team. We will need comprehensive End-User Certificates (EUC) and a detailed routing map.",
+    "timestamp": "2024-02-13 10:05",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "neutral"
+  },
+  {
+    "id": "30",
+    "sender": "Anil Deshmukh (L&T)",
+    "content": "Understood Rohan. Mikhail, could you please provide the standard EUC format filled out for this specific site? Also, we are planning to ship via Novorossiysk port.",
+    "timestamp": "2024-02-13 11:30",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "neutral"
+  },
+  {
+    "id": "31",
+    "sender": "Mikhail Volkov (Rosneft)",
+    "content": "Attached is the EUC. The equipment is strictly for civilian oil refining processes at our Saratov facility. There is no dual-use application here. Please expedite the LC, our timeline is getting tight.",
+    "timestamp": "2024-02-15 08:45",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "neutral"
+  },
+  {
+    "id": "32",
+    "sender": "Neha Gupta (Axis Bank Compliance)",
+    "content": "Hi all, Compliance here. We have reviewed the EUC. Unfortunately, this transaction has been flagged by our automated screening system. We require an exhaustive Sanctions Compliance Review. This means we need full disclosure of all ultimate beneficial owners (UBOs) of the importing entity, and a legal opinion confirming this specific HS code is not restricted.",
+    "timestamp": "2024-02-18 14:20",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "negative"
+  },
+  {
+    "id": "33",
+    "sender": "Vikram Singh (L&T Legal)",
+    "content": "Dear Neha and the Axis Bank Compliance Team, \n\nMEMORANDUM\nSUBJECT: Preliminary Sanctions Risk Assessment and Legal Analysis for Export Transaction (DEAL-IR-2024-003) - L&T to Rosneft (Saratov Refinery)\n\n1.0 INTRODUCTION AND PURPOSE: This memorandum has been prepared by the internal legal counsel of Larsen & Toubro (L&T) to address the compliance flags raised by Axis Bank concerning the proposed export of Heavy Duty Heat Exchangers and Atmospheric Distillation Columns to Rosneft for use in their Saratov oil refinery in Russia. The purpose of this exhaustive analysis is to demonstrate that the transaction in question does not violate current applicable sanctions regimes, specifically those enforced by the United States Office of Foreign Assets Control (OFAC), the European Union (EU), and the United Kingdom's Office of Financial Sanctions Implementation (OFSI), thus warranting the immediate removal of the compliance block on the Letter of Credit (LC) issuance. \n\n2.0 FACTUAL BACKGROUND AND ENTITY SCREENING: The exporter is Larsen & Toubro, an Indian multinational conglomerate. The importer is Rosneft, a Russian integrated energy company. The end-use destination is the Saratov Oil Refinery, a civilian industrial facility. We acknowledge that Rosneft is currently subject to various sanctions directives.",
+    "timestamp": "2024-02-20 16:10",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "neutral"
+  },
+  {
+    "id": "34",
+    "sender": "Neha Gupta (Axis Bank Compliance)",
+    "content": "Vikram, thank you for the memo, but it is insufficient. Our correspondent banking partners require an independent third-party legal counsel opinion, not an internal one. Furthermore, the compliance hold remains firmly in place until this is resolved.",
+    "timestamp": "2024-02-22 09:30",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "negative"
+  },
+  {
+    "id": "35",
+    "sender": "Mikhail Volkov (Rosneft)",
+    "content": "Anil, what is going on? We have been waiting over a week for the LC draft. The project schedule is slipping. If Axis Bank cannot handle this, we need to know immediately so we can switch to a non-dollar denominated mechanism or find another supplier.",
+    "timestamp": "2024-02-25 13:45",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "negative"
+  },
+  {
+    "id": "36",
+    "sender": "Anil Deshmukh (L&T)",
+    "content": "Mikhail, we sincerely apologize for the delay. We are escalating this internally and with Axis Bank. Rohan, can we get an exception or a faster track on the third-party legal review? The deal is at serious risk.",
+    "timestamp": "2024-02-25 14:15",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "negative"
+  },
+  {
+    "id": "37",
+    "sender": "Rohan Mehta (Axis Bank)",
+    "content": "Anil, Vikram, Mikhail. \n\nURGENT UPDATE: Logistics, Marine Insurance Risk Assessment, and LC Feasibility. \n\nI am writing to formally escalate a critical secondary bottleneck that has emerged from our logistics risk desk, independent of the ongoing sanctions compliance review. Even if the Baker McKenzie legal opinion clears the sanctions hurdle, we are facing an insurmountable barrier regarding the marine insurance and logistics framework required to operationalize this Letter of Credit. This constitutes a severe Insurance Coverage Gap that fundamentally compromises the viability of a CIF Novorossiysk delivery term under a bank-intermediated trade structure. I need to explain the depth of this issue so all parties understand why the transaction remains blocked. \n\n1.0 CURRENT INSURANCE MARKET DYNAMICS FOR THE BLACK SEA: The marine insurance market for voyages entering the Black Sea, specifically concerning Russian ports, has hardened to an unprecedented degree. Following the continued geopolitical volatility in the region, the Joint War Committee (JWC) of the Lloyd's Market Association (LMA) and the International Underwriting Association (IUA) has maintained the Russian Black Sea and Sea of Azov coastlines on its list of Hull War, Piracy, Terrorism and Related Perils Listed Areas. This designation radically alters the standard insurance landscape. \n\n2.0 WITHDRAWAL OF STANDARD COVER AND WAR RISK PREMIUMS: Historically, L&T has utilized standard Institute Cargo Clauses (A) policies covering all risks of loss or damage. However, nearly all major global reinsurers and primary marine insurers operating in London, Europe, and Asia have formally withdrawn or severely curtailed their coverage for shipments destined for Russian ports. They are invoking sweeping exclusionary clauses relating to war, strikes, riots, and civil commotions (SRCC). \n\nFor the very few specialist syndicates willing to write a policy for a $22.5M cargo to Novorossiysk, the War Risk Premiums (WRP) are astronomical. Instead of a standard fraction of a percent, we are seeing quotes ranging from 5% to 10% of the cargo value, valid only for 48 to 72 hours before the vessel enters the high-risk zone. The cost of this insurance alone could exceed $2 million, completely destroying the commercial margins of this contract. Furthermore, these policies contain stringent \"cancellation clauses\" allowing the insurer to terminate coverage with merely 48 hours' notice if the security situation deteriorates, leaving the cargo effectively uninsured mid-transit. \n\n3.0 P&I CLUB RESTRICTIONS: Beyond the cargo insurance, there is the issue of the vessel itself. Protection and Indemnity (P&I) clubs, which provide third-party liability cover for shipowners, are incredibly hesitant to cover vessels calling at Novorossiysk. Without valid P&I cover, major shipping lines (Maersk, MSC, Hapag-Lloyd) flatly refuse to accept the booking. The pool of available vessels is reduced to a shadow fleet of aging bulk carriers and break-bulk vessels that do not meet the safety and vetting standards required by Axis Bank's internal trade finance policies for a high-value capital goods shipment. \n\n4.0 PORT OF NOVOROSSIYSK OPERATIONAL RISKS: Novorossiysk is a major naval base as well as a commercial port. Our logistics desk assesses a high probability of collateral damage, port closures, or unannounced naval blockades. If the vessel is delayed at anchorage for weeks due to military traffic or security alerts, who bears the exorbitant demurrage costs? The current CIF contract structure places this risk heavily on the supplier (L&T) until the goods cross the ship's rail at the destination port, but under an LC structure, any delay in presenting clean on-board bills of lading compromises the payment mechanism. \n\n5.0 IMPACT ON LETTER OF CREDIT FORMULATION: An LC is a documentary credit. Under UCP 600 rules, the bank deals in documents, not goods. To negotiate a CIF LC, L&T must present an insurance document that appears on its face to cover the risks stipulated in the LC. Given the current market, it is practically impossible for L&T to secure an insurance certificate that covers \"All Risks\" including war and strikes without massive exclusionary caveats that would render the document discrepant. \n\nIf Axis Bank issues an LC demanding standard insurance, and L&T presents a restricted policy, the presentation is discrepant, payment is refused, and the LC fails. Axis Bank cannot deliberately issue an LC knowing that the beneficiary cannot possibly fulfill the documentary requirements regarding insurance. It is a violation of our fiduciary duty and internal risk controls. \n\n6.0 ALTERNATIVE PATHWAYS (FOB VS CIF): The only mathematically and operationally viable solution from the Bank's perspective is to fundamentally restructure the Incoterms. The contract must be changed from CIF Novorossiysk to FOB (Free On Board) or FCA (Free Carrier) at an Indian port (e.g., Mumbai/Nhava Sheva). \n\nUnder an FOB structure, Rosneft, as the buyer, assumes the responsibility and cost of chartering the vessel and securing the marine and war risk insurance. Rosneft likely has access to domestic Russian insurance markets (e.g., Ingosstrakh, SOGAZ) or state-backed guarantees that western and Indian banks cannot access. L&T's responsibility would end upon loading the heavy equipment onto the vessel in India. The LC would then be contingent upon presentation of a Bill of Lading showing loading in India, rather than relying on a highly fragile Black Sea transit. \n\nI understand Mikhail previously stated that switching to FOB requires a complete contract rewrite and board approval taking 3 weeks. However, I must be unequivocally clear: Axis Bank will not—and functionally cannot—issue a CIF Letter of Credit for a $22.5 million cargo to a Russian Black Sea port under the current global insurance collapse. The coverage gap is too vast, the risk to the underlying asset is too high, and the documentary requirements of the LC cannot be reliably met. The sanctions review is moving forward, but without resolving this logistics and insurance paralyzation, the deal remains definitively blocked.",
+    "timestamp": "2024-02-26 10:00",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "negative"
+  },
+  {
+    "id": "38",
+    "sender": "Anil Deshmukh (L&T)",
+    "content": "This is disastrous. We cannot ship $22.5M worth of equipment without comprehensive marine and war-risk insurance. Rohan, does Axis have any alternative insurer brokers who specialize in high-risk corridors? Mikhail, can Rosneft potentially arrange insurance on your end?",
+    "timestamp": "2024-02-26 11:20",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "negative"
+  },
+  {
+    "id": "39",
+    "sender": "Mikhail Volkov (Rosneft)",
+    "content": "Switching to FOB now requires a complete contract rewrite and internal board approval which will take 3 weeks. Unacceptable. You quoted CIF, you need to deliver CIF. We expect you to source an alternative insurer immediately.",
+    "timestamp": "2024-02-27 09:05",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "negative"
+  },
+  {
+    "id": "40",
+    "sender": "Vikram Singh (L&T Legal)",
+    "content": "Just to update everyone: we have engaged external counsel (Baker McKenzie) to provide the independent sanctions opinion requested by Axis. They estimate 7-10 days for completion. Regarding the insurance, our broker is checking with P&I clubs in the Middle East.",
+    "timestamp": "2024-02-28 14:50",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "neutral"
+  },
+  {
+    "id": "41",
+    "sender": "Rohan Mehta (Axis Bank)",
+    "content": "Noted Vikram. Please be advised that until both the sanctions compliance review is officially cleared by Neha's team, and a valid insurance certificate is presented, the status of this deal in our system is firmly blocked. Progress is frozen.",
+    "timestamp": "2024-03-01 10:10",
+    "type": "email",
+    "dealId": "DEAL-IR-2024-003",
+    "sentiment": "negative"
+  }
 ];

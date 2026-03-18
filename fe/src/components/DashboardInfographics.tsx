@@ -310,7 +310,7 @@ const DashboardInfographics = ({ onViewDeal }: DashboardInfographicsProps) => {
             className="bg-card border border-border rounded-lg p-6"
           >
             <h2 className="text-lg font-semibold text-foreground mb-4">Deal Status Distribution</h2>
-            <ResponsiveContainer width="100%" height={280}>
+            <ResponsiveContainer width="100%" height={380}>
               <PieChart>
                 <Pie
                   data={stats.statusDistribution}
@@ -318,7 +318,7 @@ const DashboardInfographics = ({ onViewDeal }: DashboardInfographicsProps) => {
                   cy="50%"
                   labelLine={false}
                   label={({ name, value }) => `${name} (${value})`}
-                  outerRadius={80}
+                  outerRadius={110}
                   fill="#8884d8"
                   dataKey="value"
                 >

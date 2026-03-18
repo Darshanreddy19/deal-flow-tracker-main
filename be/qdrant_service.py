@@ -6,6 +6,7 @@ Provides upsert, search, and collection management for the multi-agent graph.
 import os
 import uuid
 from typing import List, Dict, Any, Optional
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from dotenv import load_dotenv
 from qdrant_client import QdrantClient
@@ -78,29 +79,53 @@ def upsert_text(
     text: str,
     metadata: Dict[str, Any],
     collection_name: str = QDRANT_COLLECTION_NAME,
-) -> str:
+) -> List[str]: # Note: Now returns a List of strings (point IDs)
     """
-    Embed *text*, store it in Qdrant with *metadata* as the payload.
-    Returns the generated point id.
+    Split *text* into chunks, embed each, and store them in Qdrant 
+    with *metadata* as the payload. Returns generated point ids.
     """
     embedding_model = _get_embedding_model()
-    vector = embedding_model.embed_query(text)
 
-    # Auto-create / verify collection dimension
-    ensure_collection(collection_name, len(vector))
+    # Split text to safely stay under GigaChat's 4096 token limit
+    # 4000 characters is roughly 1000-1500 tokens.
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=2000, 
+        chunk_overlap=400
+    )
+    chunks = text_splitter.split_text(text)
+    
+    point_ids = []
+    points_to_upsert = []
 
-    point_id = str(uuid.uuid4())
-    get_client().upsert(
-        collection_name=collection_name,
-        points=[
+    for i, chunk in enumerate(chunks):
+        vector = embedding_model.embed_query(chunk)
+
+        # Auto-create / verify collection dimension using the first chunk's vector
+        if i == 0:
+            ensure_collection(collection_name, len(vector))
+
+        point_id = str(uuid.uuid4())
+        point_ids.append(point_id)
+        
+        # Keep track of the specific chunk text and its index
+        chunk_metadata = {**metadata, "text": chunk, "chunk_index": i}
+
+        points_to_upsert.append(
             qdrant_models.PointStruct(
                 id=point_id,
                 vector=vector,
-                payload={**metadata, "text": text},
+                payload=chunk_metadata,
             )
-        ],
-    )
-    return point_id
+        )
+
+    # Batch upsert all chunks for this text
+    if points_to_upsert:
+        get_client().upsert(
+            collection_name=collection_name,
+            points=points_to_upsert,
+        )
+
+    return point_ids
 
 
 # ---------------------------------------------------------------------------
@@ -120,8 +145,17 @@ def search_similar(
     if not client.collection_exists(collection_name):
         return []
 
+    # ---------------------------------------------------------
+    # FIX: Truncate query to avoid GigaChat 4096 token limit
+    # 1 token is ~3-4 characters. 12,000 chars is a very safe 
+    # boundary. We take the *last* 12,000 characters.
+    # ---------------------------------------------------------
+    safe_query = query[-12000:] if len(query) > 12000 else query
+
     embedding_model = _get_embedding_model()
-    vector = embedding_model.embed_query(query)
+    
+    # Embed the truncated, safe query
+    vector = embedding_model.embed_query(safe_query)
 
     # Build optional Qdrant filter
     qdrant_filter = None
