@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "buildCommand": "cd fe && npm install && npm run build",
+  "outputDirectory": "fe/dist",
+  "installCommand": "npm install --prefix fe && pip install -r be/requirements.txt",
+  "env": {
+    "VITE_API_URL": "@vite_api_url"
+  },
+  "functions": {
+    "be/api/**/*.py": {
+      "runtime": "python3.12"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/be/api/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

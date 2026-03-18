@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+*/node_modules/
+*/venv/
+*/__pycache__/
+
+# Files
+.git
+.gitignore
+.DS_Store
+*.log
+npm-debug.log
+yarn-error.log
+
+# Docs (optional - remove if you want docs deployed)
+*.md
+!README.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test files (optional - remove if you want tests on deployment)
+*.test.ts
+*.test.tsx
