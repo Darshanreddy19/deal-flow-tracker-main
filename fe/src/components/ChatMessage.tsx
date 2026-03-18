@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Bot, Mail, MessageSquare, ThumbsUp, ThumbsDown, Minus } from "lucide-react";
+import { Bot, Languages, Loader2, Mail, MessageSquare, ThumbsUp, ThumbsDown, Minus } from "lucide-react";
 import { Message } from "@/data/types";
+import { translateText } from "@/lib/api";
 
 interface ChatMessageProps {
   message: Message;
@@ -27,6 +29,11 @@ function getSenderRole(sender: string, type: string): SenderRole {
   if (s.includes("sber") || s.includes("you (")) return "sber";
   if (RUSSIAN_ORGS.some((org) => s.includes(org))) return "russian";
   return "indian";
+}
+
+/** Check if text contains Cyrillic characters (Russian) */
+function isRussianText(text: string): boolean {
+  return /[\u0400-\u04ff]/.test(text);
 }
 
 const roleConfig = {
@@ -69,12 +76,40 @@ const roleConfig = {
 };
 
 const ChatMessage = ({ message, index }: ChatMessageProps) => {
+  const [translation, setTranslation] = useState<string | null>(null);
+  const [translating, setTranslating] = useState(false);
+  const [showTranslation, setShowTranslation] = useState(false);
+
   const role = getSenderRole(message.sender, message.type);
   const config = roleConfig[role];
   const isSystem = message.type === "system";
   const isSber = role === "sber";
+  const isRussian = !isSystem && isRussianText(message.content);
   const SentimentIcon = sentimentIcons[message.sentiment].icon;
   const sentimentClass = sentimentIcons[message.sentiment].className;
+
+  const handleTranslate = async () => {
+    if (translation) {
+      setShowTranslation(!showTranslation);
+      return;
+    }
+
+    setTranslating(true);
+    try {
+      const result = await translateText({
+        text: message.content,
+        source_lang: "ru",
+        target_lang: "en",
+      });
+      setTranslation(result.translated);
+      setShowTranslation(true);
+    } catch {
+      setTranslation("[Translation unavailable]");
+      setShowTranslation(true);
+    } finally {
+      setTranslating(false);
+    }
+  };
 
   return (
     <motion.div
@@ -107,6 +142,18 @@ const ChatMessage = ({ message, index }: ChatMessageProps) => {
           >
             {config.label}
           </span>
+          {/* Language badge */}
+          {!isSystem && (
+            <span
+              className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                isRussian
+                  ? "bg-indigo-100 text-indigo-600"
+                  : "bg-emerald-100 text-emerald-600"
+              }`}
+            >
+              {isRussian ? "RU" : "EN"}
+            </span>
+          )}
           <span className="text-xs text-muted-foreground font-mono">
             {message.timestamp}
           </span>
@@ -124,6 +171,36 @@ const ChatMessage = ({ message, index }: ChatMessageProps) => {
               {line}
             </p>
           ))}
+
+          {/* Translation section */}
+          {showTranslation && translation && (
+            <div className="mt-2 pt-2 border-t border-border/50">
+              <p className="text-[10px] font-mono text-muted-foreground uppercase mb-1">
+                English Translation
+              </p>
+              <p className="text-sm text-foreground/80 italic">{translation}</p>
+            </div>
+          )}
+
+          {/* Translate button */}
+          {isRussian && (
+            <button
+              onClick={handleTranslate}
+              disabled={translating}
+              className="mt-2 flex items-center gap-1 text-[11px] font-medium text-indigo-600 hover:text-indigo-800 transition-colors disabled:opacity-50"
+            >
+              {translating ? (
+                <Loader2 className="h-3 w-3 animate-spin" />
+              ) : (
+                <Languages className="h-3 w-3" />
+              )}
+              {translating
+                ? "Translating..."
+                : showTranslation
+                  ? "Hide translation"
+                  : "Translate to English"}
+            </button>
+          )}
         </div>
       </div>
     </motion.div>

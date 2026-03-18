@@ -26,6 +26,8 @@ from models import (
     DraftFollowupResponse,
     ApproveDraftRequest,
     ApproveDraftResponse,
+    TranslateRequest,
+    TranslateResponse,
 )
 import qdrant_service
 
@@ -507,6 +509,70 @@ async def approve_draft(request: ApproveDraftRequest):
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Draft approval failed: {str(e)}")
+
+
+# ── POST /api/translate ──────────────────────────────────────────────
+@app.post("/api/translate", response_model=TranslateResponse)
+async def translate_text(request: TranslateRequest):
+    """
+    Translate text between Russian and English using GigaChat.
+    GigaChat excels at Russian language tasks.
+    """
+    try:
+        from brain import LLM
+        from config import MODEL_NAME
+
+        llm_factory = LLM(provider=MODEL_NAME)
+        llm = llm_factory.get_model()
+
+        # Detect source language if auto
+        source = request.source_lang
+        if source == "auto":
+            # Simple Cyrillic detection
+            has_cyrillic = any("\u0400" <= ch <= "\u04ff" for ch in request.text)
+            source = "ru" if has_cyrillic else "en"
+
+        target = request.target_lang
+        if source == target:
+            return TranslateResponse(
+                original=request.text,
+                translated=request.text,
+                source_lang=source,
+                target_lang=target,
+            )
+
+        lang_names = {"ru": "Russian", "en": "English"}
+        source_name = lang_names.get(source, source)
+        target_name = lang_names.get(target, target)
+
+        from langchain_core.prompts import ChatPromptTemplate
+
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", (
+                f"You are a professional translator specializing in business and trade communications. "
+                f"Translate the following text from {source_name} to {target_name}. "
+                f"Maintain professional tone and preserve all technical/financial terminology. "
+                f"Output ONLY the translated text, nothing else."
+            )),
+            ("user", "{text}"),
+        ])
+
+        chain = prompt | llm
+        result = chain.invoke({"text": request.text})
+        translated = result.content if hasattr(result, "content") else str(result)
+
+        return TranslateResponse(
+            original=request.text,
+            translated=translated.strip(),
+            source_lang=source,
+            target_lang=target,
+        )
+
+    except Exception as e:
+        print(f"\n❌ Error in /api/translate: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Translation failed: {str(e)}")
 
 
 # ═══════════════════════════════════════════════════════════════════════════

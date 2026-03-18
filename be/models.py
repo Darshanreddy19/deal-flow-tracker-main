@@ -183,3 +183,20 @@ class ApproveDraftResponse(BaseModel):
     deal_id: str
     status: str
     message: str
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# Translation Models
+# ═══════════════════════════════════════════════════════════════════════════
+
+class TranslateRequest(BaseModel):
+    text: str
+    source_lang: Optional[str] = "auto"
+    target_lang: str = "en"
+
+
+class TranslateResponse(BaseModel):
+    original: str
+    translated: str
+    source_lang: str
+    target_lang: str

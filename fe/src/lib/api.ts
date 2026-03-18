@@ -236,3 +236,36 @@ export const approveDraft = async (
 
   return response.json();
 };
+
+// Translate text (Russian ↔ English)
+export interface TranslateRequestPayload {
+  text: string;
+  source_lang?: string;
+  target_lang: string;
+}
+
+export interface TranslateResponsePayload {
+  original: string;
+  translated: string;
+  source_lang: string;
+  target_lang: string;
+}
+
+export const translateText = async (
+  payload: TranslateRequestPayload
+): Promise<TranslateResponsePayload> => {
+  const response = await fetch(`${API_BASE_URL}/api/translate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.detail || "Translation failed");
+  }
+
+  return response.json();
+};
