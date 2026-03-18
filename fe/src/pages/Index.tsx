@@ -228,7 +228,7 @@ const Index = () => {
                   <div className="px-4 py-3 border-b border-border">
                     <h2 className="text-xs font-mono text-muted-foreground uppercase tracking-wider">Deal Intelligence</h2>
                   </div>
-                  <DealDetailPanel deal={selectedDeal} />
+                  <DealDetailPanel deal={selectedDeal} onNavigateToAnalysis={() => setActiveView("chat")} />
                 </div>
               </div>
             </div>

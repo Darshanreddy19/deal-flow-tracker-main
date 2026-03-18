@@ -1,13 +1,14 @@
 import { motion } from "framer-motion";
-import { AlertTriangle, CheckCircle2, ListTodo, Shield, Target } from "lucide-react";
+import { AlertTriangle, ArrowRight, CheckCircle2, ListTodo, Shield, Target } from "lucide-react";
 import { Deal } from "@/data/types";
 import StatusBadge from "./StatusBadge";
 
 interface DealDetailPanelProps {
   deal: Deal;
+  onNavigateToAnalysis?: () => void;
 }
 
-const DealDetailPanel = ({ deal }: DealDetailPanelProps) => {
+const DealDetailPanel = ({ deal, onNavigateToAnalysis }: DealDetailPanelProps) => {
   return (
     <motion.div
       key={deal.id}
@@ -17,10 +18,21 @@ const DealDetailPanel = ({ deal }: DealDetailPanelProps) => {
       className="h-full overflow-y-auto p-4 space-y-4"
     >
       {/* Header */}
-      <div>
-        <p className="text-xs font-mono text-primary mb-1">{deal.id}</p>
-        <h2 className="text-lg font-bold text-foreground">{deal.title}</h2>
-        <p className="text-sm text-muted-foreground mt-1">{deal.parties}</p>
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-mono text-primary mb-1">{deal.id}</p>
+          <h2 className="text-lg font-bold text-foreground">{deal.title}</h2>
+          <p className="text-sm text-muted-foreground mt-1">{deal.parties}</p>
+        </div>
+        {onNavigateToAnalysis && (
+          <button
+            onClick={onNavigateToAnalysis}
+            className="flex-shrink-0 flex items-center gap-1.5 rounded-md border border-primary/30 bg-primary/10 hover:bg-primary/20 text-primary font-semibold text-xs px-3 py-1.5 transition-colors"
+          >
+            AI Analysis
+            <ArrowRight className="h-3.5 w-3.5" />
+          </button>
+        )}
       </div>
 
       {/* Status & Risk */}
