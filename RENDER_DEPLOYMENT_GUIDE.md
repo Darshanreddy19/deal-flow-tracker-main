@@ -39,6 +39,7 @@ Render is ideal for this project because:
    - **Build Command**: `pip install -r be/requirements.txt`
    - **Start Command**: `cd be && uvicorn main:app --host 0.0.0.0 --port $PORT`
    - **Plan**: Free or Paid (free has 50 CPU-hours/month)
+   - **Python Version**: Pin to `3.11` or `3.12` and do not use Render's default `3.14.x` for this codebase
 
 ## Step 3: Add Environment Variables (Backend)
 
@@ -48,6 +49,9 @@ In Render → Web Service → Environment:
 # If using Qdrant Cloud:
 QDRANT_API_KEY=your_api_key_here
 QDRANT_URL=https://your-instance.qdrant.io
+
+# GigaChat credentials used by the LangGraph agents
+GIGACHAT_CREDENTIALS=your_gigachat_credentials_here
 
 # API Settings
 API_HOST=0.0.0.0
@@ -151,6 +155,15 @@ app.add_middleware(
 2. Get API key and URL
 3. Update `be/config.py` or `be/qdrant_service.py` to use cloud credentials
 4. Add credentials to Render environment variables
+
+### Issue: Service exits before opening the port
+**Common causes**:
+- Render selected Python `3.14.x` by default, but this backend's LangChain stack is not compatible with it yet
+- `GIGACHAT_CREDENTIALS` is missing, and the AI graph initialization fails during startup
+
+**Solution**:
+- Pin Python with a repo-root `.python-version` file or the `PYTHON_VERSION` environment variable
+- Add `GIGACHAT_CREDENTIALS`, `QDRANT_URL`, and `QDRANT_API_KEY` in Render before redeploying
 
 ### Issue: Large Python packages timeout
 **Solution**: Render has no size limits, so this shouldn't happen. If it does:

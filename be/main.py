@@ -49,8 +49,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Compile the graph once at startup
-deal_graph = build_dealflow_graph()
+# Build the graph lazily so the web process can start and bind its port
+# even if model credentials are not configured yet in the environment.
+deal_graph = None
+
+
+def get_deal_graph():
+    global deal_graph
+    if deal_graph is None:
+        deal_graph = build_dealflow_graph()
+    return deal_graph
 
 # In-memory map: thread_id → latest snapshot (for status polling)
 _thread_states: dict[str, dict] = {}
@@ -83,8 +91,9 @@ def _run_graph(initial_state: dict, thread_id: str) -> dict:
     final_state = dict(initial_state)
     interrupted = False
     interrupt_payload = None
+    graph = get_deal_graph()
 
-    for event in deal_graph.stream(initial_state, config):
+    for event in graph.stream(initial_state, config):
         if "__interrupt__" in event:
             interrupted = True
             interrupts = event["__interrupt__"]
@@ -204,6 +213,7 @@ async def review_task(request: GatekeeperReviewRequest):
     Resume the gatekeeper after HITL review (approve / reject / edit).
     """
     config = {"configurable": {"thread_id": request.thread_id}}
+    graph = get_deal_graph()
 
     resume_payload = {"action": request.action}
     if request.edited_task:
@@ -212,7 +222,7 @@ async def review_task(request: GatekeeperReviewRequest):
     command = Command(resume=resume_payload)
 
     final_state = {}
-    for event in deal_graph.stream(command, config):
+    for event in graph.stream(command, config):
         if "__interrupt__" in event:
             # Re-interrupted (rejected → strategist → gatekeeper again)
             return GatekeeperReviewResponse(

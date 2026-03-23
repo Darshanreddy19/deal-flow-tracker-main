@@ -2,12 +2,9 @@ services:
   # Backend API - Python FastAPI application
   - type: web
     name: dealflow-api
-    runtime: python312
+    runtime: python
     buildCommand: cd be && pip install -r requirements.txt
     startCommand: "cd be && uvicorn main:app --host 0.0.0.0 --port $PORT"
-    envVars:
-      - key: PYTHON_VERSION
-        value: "3.12.0"
     autoDeploy: true
     
   # Frontend - React/Vite static site
