@@ -14,14 +14,5 @@ services:
     staticPublishPath: fe/dist
     envVars:
       - key: VITE_API_URL
-        fromService:
-          name: dealflow-api
-          type: web
-          property: url
+        value: https://dealflow-api-t3xd.onrender.com
     autoDeploy: true
-    routes:
-      - path: /
-        destination: /index.html
-        status: 200
-      - path: /api/*
-        destination: ${DEALFLOW_API_URL}/api/$1
